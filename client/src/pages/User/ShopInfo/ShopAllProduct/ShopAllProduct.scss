@@ -1,0 +1,55 @@
+/* Has error */
+.has-error .form-control {
+    border-color: #d9534f;
+    -webkit-box-shadow: none !important;
+            box-shadow: none !important;
+  }
+  .has-error .form-control:focus {
+    border-color: #b52b27;
+  }
+  .has-error .help-block {
+    color: #d9534f;
+  }
+  /* Checkboxes */
+  .checkbox input[type="checkbox"] {
+    display: none;
+  }
+  .checkbox label {
+    padding-left: 0;
+  }
+  .checkbox label:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    background-color: #eee;
+    text-align: center;
+    font-family: "FontAwesome";
+  }
+  .checkbox input[type="checkbox"]:checked + label::before {
+    content: "\f00c";
+  }
+  /* Radios */
+  .radio input[type="radio"] {
+    display: none;
+  }
+  .radio label {
+    padding-left: 0;
+  }
+  .radio label:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 15px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 10px solid #eee;
+    background-color: #333333;
+  }
+  .radio input[type="radio"]:checked + label:before {
+    border-width: 7px;
+  }

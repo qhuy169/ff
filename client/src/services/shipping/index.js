@@ -1,0 +1,1 @@
+export { ghn } from './ghn.service';

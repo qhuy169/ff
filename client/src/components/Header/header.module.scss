@@ -1,0 +1,52 @@
+.heading {
+	color: #000;
+	margin-bottom: 1%;
+	// background-image: linear-gradient(0, #d6947f, #bdbf58);
+	font-size: 1.4rem;
+	@mixin d-flex {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		flex-wrap: wrap;
+	}
+	.logo {
+		background-size: cover;
+		width: 240px;
+		height: 44px;
+		cursor: pointer;
+	}
+	.top {
+		height: 50px;
+		@include d-flex;
+		.wrap {
+			width: 1200px;
+			height: 40px;
+			@include d-flex;
+			justify-content: space-between;
+		}
+	}
+	.bottom {
+		display: flex;
+		height: 34px;
+		nav {
+			@include d-flex;
+			justify-content: space-between;
+			width: 90%;
+			max-width: 1200px;
+			margin: auto;
+			.item {
+				@include d-flex;
+				gap: 4px;
+			}
+		}
+	}
+}
+#tippy-5{
+    inset: 1px 2px auto 10px!important;
+    margin: -9px!important;
+}
+.tippy-arrow::before{
+    display: none;
+}
+
+

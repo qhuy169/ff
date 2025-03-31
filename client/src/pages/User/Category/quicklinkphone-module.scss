@@ -1,0 +1,42 @@
+.container__phone {
+    max-width: 1200px;
+    margin: auto;
+
+    .container__quicklink-phone,
+    .container__quicklink-demand {
+
+        .quicklink {
+            background-color: #fff;
+
+            div {
+                max-width: 100%;
+                grid-template-columns: repeat(9, minmax(0, 1fr));
+
+                a {
+                    border: 1px solid #e0e0e0;
+                }
+
+                a:hover {
+                    border: 1px solid #2f80ed;
+                    color: #2f80ed;
+                }
+            }
+        }
+    }
+
+    .container__quicklink-demand {
+        
+        justify-content: start;
+        .quicklink {
+            padding: 0;
+            margin: 0;
+            div {
+                padding-top: 15px;
+                max-width: 100%;
+                display: flex;
+                flex-wrap: wrap;
+            }
+        }
+    }
+
+}

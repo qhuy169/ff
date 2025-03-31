@@ -1,0 +1,31 @@
+{
+    "field": {
+        "id": "Id",
+        "name": "Name",
+        "price": "Price",
+        "originPrice": "Origin price",
+        "quantity": "Quantity",
+        "availableQuantity": "Available quantity",
+        "soldQuantity": "Sold quantity",
+        "description": "Description",
+        "avatar": "Avatar",
+        "thumbnail": "Thumbnail",
+        "gallery": "Gallery",
+        "status": "Status"
+    },
+    "table": {
+        "brand": "Brand",
+        "category": "Category",
+        "product": "Product",
+        "shop": "Shop",
+        "user": "User"
+    },
+    "action": {
+        "add": "Add",
+        "update": "Update",
+        "delete": "Delete",
+        "detail": "Detail",
+        "view": "View",
+        "send": "Send"
+    }
+}

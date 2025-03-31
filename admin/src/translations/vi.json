@@ -1,0 +1,31 @@
+{
+    "field": {
+        "id": "Id",
+        "name": "Tên",
+        "price": "Giá",
+        "originPrice": "Giá gốc",
+        "quantity": "Số lượng",
+        "availableQuantity": "Số lượng có thể",
+        "soldQuantity": "Số lượng đã bán",
+        "description": "Mô tả",
+        "avatar": "Ảnh đại diện",
+        "thumbnail": "Hình ảnh nhỏ",
+        "gallery": "Thư viện ảnh",
+        "status": "Trạng thái"
+    },
+    "table": {
+        "brand": "Nhãn hàng",
+        "category": "Danh mục",
+        "product": "Sản phẩm",
+        "shop": "Cửa hàng",
+        "user": "Người dùng"
+    },
+    "action": {
+        "add": "Thêm",
+        "update": "Cập nhật",
+        "delete": "Xóa",
+        "detail": "Chi tiết",
+        "view": "Hiển thị",
+        "send": "Gửi"
+    }
+}

@@ -1,0 +1,120 @@
+import Home from "../pages/home/Home";
+import Order from "../pages/order/Order";
+import Login from "../pages/login/Login";
+import ListProduct from "../pages/list/ListProduct";
+import Single from "../pages/single/Single";
+import New from "../pages/new/New";
+import NotFound from "../pages/notfound/NotFound";
+import { productInputs, userInputs } from "../formSource";
+import { Routes, Route } from "react-router-dom";
+import { ProtectedRoute } from "./protected.route";
+<<<<<<< HEAD
+import ListUser from "../pages/list/ListUser";
+=======
+import ListReview from "../pages/list/ListReview";
+>>>>>>> bf5ff073eeccf1251ef52167ff226e0623c568e7
+
+export const AdminRoutes = () => {
+	return (
+		<Routes>
+			<Route
+				path="/"
+			>
+				<Route
+					index
+					element={
+						<ProtectedRoute>
+							<Home />
+						</ProtectedRoute>
+					}
+				/>
+
+				<Route path="order"
+					index
+					element={
+						<ProtectedRoute>
+							<Order />
+						</ProtectedRoute>
+					}
+				/>
+
+
+				<Route path="users">
+					<Route index
+						element={
+							<ProtectedRoute>
+								<ListUser/>
+							</ProtectedRoute>
+						}
+					/>
+					<Route path=":userId"
+						element={
+							<ProtectedRoute>
+								<Single />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="new"
+						element={
+							<ProtectedRoute>
+								<New inputs={userInputs} title="Add New User" />
+							</ProtectedRoute>
+						}
+					/>
+				</Route>
+				<Route path="products">
+					<Route index
+						element={
+							<ProtectedRoute>
+<<<<<<< HEAD
+								<ListProduct/>
+=======
+								<List />
+>>>>>>> bf5ff073eeccf1251ef52167ff226e0623c568e7
+							</ProtectedRoute>
+						}
+					/>
+					<Route path=":productId"
+						element={
+							<ProtectedRoute>
+								<Single />
+							</ProtectedRoute>
+						}
+					/>
+					<Route
+						path="new"
+						element={
+							<ProtectedRoute>
+								<New inputs={productInputs} title="Add New Product" />
+							</ProtectedRoute>
+						}
+					/>
+				</Route>
+				<Route path="reviews">
+					<Route index 
+						element={
+							<ProtectedRoute>
+								<ListReview/>
+							</ProtectedRoute>
+						} 
+					/>
+					<Route path=":reviewId" 
+						element={
+							<ProtectedRoute>
+								<Single />
+							</ProtectedRoute>
+						} 
+					/>
+				</Route>
+				<Route path="login" element={<Login />} />
+				<Route path="*" element={<NotFound />} />
+			</Route>
+
+		</Routes>
+	)
+
+}
+
+
+
