@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-
+.history
 ### STS ###
 .apt_generated
 .classpath
@@ -31,7 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
-.env
+
 config/*.json
 config/*.yml
 application.yml

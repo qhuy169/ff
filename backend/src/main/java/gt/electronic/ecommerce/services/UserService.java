@@ -29,4 +29,6 @@ public interface UserService extends UserDetailsService {
   UserResponseDTO updateUser(Long id, UserCreationDTO creationDTO, MultipartFile imageFile);
 
   UserResponseDTO deleteUserById(Long id);
+
+  void saveUser(User user);
 }

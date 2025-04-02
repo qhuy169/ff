@@ -19,6 +19,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +43,8 @@ public class AuthController {
   @Autowired
   AuthenticationManager authManager;
   private AuthMapper authMapper;
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   @Autowired
   public void AuthMapper(AuthMapper authMapper) {
@@ -139,5 +142,57 @@ public class AuthController {
         authorizationRequestBaseUri + "/" + registration.getRegistrationId()));
 
     return oauth2AuthenticationUrls.toString();
+  }
+
+  @PostMapping("/update-password")
+  public ResponseObject<?> updatePassword(
+      @RequestParam String email,
+      @RequestParam String oldPassword,
+      @RequestParam String newPassword) {
+    try {
+      User user = (User) userService.loadUserByUsername(email);
+      if (!passwordEncoder.matches(oldPassword, user.getPassword())) {
+        return new ResponseObject<>(HttpStatus.UNAUTHORIZED, "Old password is incorrect");
+      }
+
+      user.setPassword(passwordEncoder.encode(newPassword));
+      userService.saveUser(user);
+
+      return new ResponseObject<>(HttpStatus.OK, "Password updated successfully");
+    } catch (UsernameNotFoundException ex) {
+      return new ResponseObject<>(HttpStatus.NOT_FOUND, "User not found");
+    } catch (Exception ex) {
+      LOGGER.error("Error updating password: " + ex.getMessage());
+      return new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the password");
+    }
+  }
+
+  @PutMapping("/update-profile")
+  public ResponseObject<?> updateProfile(@RequestBody @Valid User updatedUser) {
+    try {
+      User existingUser = (User) userService.loadUserByUsername(updatedUser.getEmail());
+      if (existingUser == null) {
+        return new ResponseObject<>(HttpStatus.NOT_FOUND, "User not found");
+      }
+
+      // Update user details
+      existingUser.setFirstName(updatedUser.getFirstName());
+      existingUser.setLastName(updatedUser.getLastName());
+      existingUser.setEmail(updatedUser.getEmail());
+      existingUser.setPhone(updatedUser.getPhone());
+      existingUser.setGender(updatedUser.getGender());
+      existingUser.setUsername(updatedUser.getUsername());
+      existingUser.setBirthDate(updatedUser.getBirthDate());
+      if (updatedUser.getAddresses() != null) {
+        existingUser.setAddresses(updatedUser.getAddresses());
+      }
+
+      userService.saveUser(existingUser);
+
+      return new ResponseObject<>(HttpStatus.OK, "Profile updated successfully", existingUser);
+    } catch (Exception ex) {
+      LOGGER.error("Error updating profile: " + ex.getMessage());
+      return new ResponseObject<>(HttpStatus.INTERNAL_SERVER_ERROR, "An error occurred while updating the profile");
+    }
   }
 }

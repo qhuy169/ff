@@ -18,6 +18,7 @@ import { DarkModeContext } from "../../context/darkModeContext";
 import { useContext } from "react";
 import { getAllOrders } from "../../redux/order/ordersApi";
 import { useDispatch } from "react-redux";
+import { CaretDownFill } from "react-bootstrap-icons";
 
 const Sidebar = () => {
     const dispat = useDispatch();
@@ -25,10 +26,10 @@ const Sidebar = () => {
     const { dispatch } = useContext(DarkModeContext);
 
     const logout = () => {
-        if(confirm("Bạn có muốn thoát không?")) {
+        if (confirm("Bạn có muốn thoát không?")) {
             localStorage.removeItem('token')
             window.location.reload()
-        } 
+        }
     };
     return (
         <div className="sidebar">
@@ -66,28 +67,19 @@ const Sidebar = () => {
                             <span>Orders</span>
                         </li>
                     </Link>
-    
+
                     <Link to="/order" style={{ textDecoration: "none" }}></Link>
-                    <Link to="/category" style={{ textDecoration: "none" }}>
+                    <Link to="/categories" style={{ textDecoration: "none" }}>
                         <li>
-                            <CreditCardIcon className="icon" />
+                            <CaretDownFill className="icon" />
                             <span>Danh mục</span>
                         </li>
                     </Link>
-    
-                    <Link to="/category" style={{ textDecoration: "none" }}></Link>
-   
-                    <Link to="/discount" style={{ textDecoration: "none" }}>
-                        <li>
-                            <CreditCardIcon className="icon" />
-                            <span>Khuyến mãi</span>
-                        </li>
-                    </Link>
-    
-                    <Link to="/discount" style={{ textDecoration: "none" }}></Link>
-   
+
+
+
                     <p className="title">USER</p>
-           
+
                     <li onClick={logout}>
                         <ExitToAppIcon className="icon" />
                         <span>Logout</span>

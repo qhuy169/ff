@@ -66,12 +66,12 @@ const CategoryForm = () => {
   return (
     <div className="max-w-xl mx-auto bg-white p-6 shadow-md rounded-lg">
       <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-        <i className="bi bi-tags text-blue-500"></i> Thêm Danh Mục
+        <i className="bi bi-tags text-blue-500"></i> Add Category
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* Tên danh mục */}
         <div>
-          <label className="block font-medium">Tên danh mục</label>
+          <label className="block font-medium">Name category</label>
           <input
             {...register("name", { required: true })}
             className="w-full p-2 border rounded-md focus:ring focus:ring-blue-200"
@@ -90,7 +90,7 @@ const CategoryForm = () => {
 
         {/* Mô tả */}
         <div>
-          <label className="block font-medium">Mô tả</label>
+          <label className="block font-medium">Description</label>
           <textarea
             {...register("description")}
             className="w-full p-2 border rounded-md focus:ring focus:ring-blue-200"
@@ -98,7 +98,7 @@ const CategoryForm = () => {
         </div>
 
         {/* Danh mục cha */}
-        <div>
+        {/* <div>
           <label className="block font-medium">Danh mục cha</label>
           <select
             {...register("parentCategoryId")}
@@ -111,11 +111,11 @@ const CategoryForm = () => {
               </option>
             ))}
           </select>
-        </div>
+        </div> */}
 
         {/* Ảnh (imageFile) */}
         <div>
-          <label className="block font-medium">Ảnh danh mục</label>
+          <label className="block font-medium">Image Category</label>
           <input
             type="file"
             {...register("image")}
@@ -134,7 +134,7 @@ const CategoryForm = () => {
           type="submit"
           className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 flex items-center justify-center gap-2"
         >
-          <i className="bi bi-plus-lg"></i> Thêm danh mục
+          <i className="bi bi-plus-lg"></i> Add Category
         </button>
       </form>
     </div>

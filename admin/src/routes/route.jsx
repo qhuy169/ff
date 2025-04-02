@@ -62,11 +62,11 @@ export const AdminRoutes = () => {
           <Route index element={<Comment />} />
           <Route path=":commentId" element={<CommentView />} />
         </Route>
-        <Route path="category">
-  <Route index element={<CategoryList />} />
-  <Route path="add" element={<CategoryForm />} />  {/* Route mới cho thêm danh mục */}
-  <Route path=":categoryId" element={<CommentView />} />
-</Route>
+        <Route path="categories">
+          <Route index element={<CategoryList />} />
+          <Route path="new" element={<CategoryForm />} />  {/* Route mới cho thêm danh mục */}
+          <Route path=":categoryId" element={<CategoryForm />} />
+        </Route>
 
         <Route path="*" element={<NotFound />} />
       </Route>

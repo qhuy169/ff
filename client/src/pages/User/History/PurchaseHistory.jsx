@@ -12,7 +12,7 @@ const EmptyOrder = () => {
             <CartXFill className='text-9xl text-red-600'></CartXFill>
 
             <p className='my-8'>Bạn chưa có đơn hàng nào</p>
-       
+
         </div>
     );
 };

@@ -100,6 +100,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void saveUser(User user) {
+        userRepo.save(user);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String loginKey) throws UsernameNotFoundException {
         if (Utils.isPattern(loginKey) == EPattern.PHONE) {
             return this.userRepo.findByPhone(loginKey)
