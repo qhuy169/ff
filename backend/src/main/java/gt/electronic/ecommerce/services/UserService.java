@@ -18,6 +18,8 @@ public interface UserService extends UserDetailsService {
 
   UserResponseDTO getUserById(Long id);
 
+  Long getUserCount();
+
   UserResponseDTO getUserByAccessToken(String accessToken);
 
   User getUserByLoginKey(String loginKey);

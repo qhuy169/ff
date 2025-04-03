@@ -13,6 +13,9 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,8 +28,20 @@ import java.util.List;
 public interface OrderRepository extends JpaRepository<Order, Long> {
         Page<Order> findAllByUser(User user, Pageable pageable);
 
+        @Query("SELECT p.name FROM OrderItem oi " +
+                        "JOIN oi.product p " +
+                        "JOIN oi.orderShop os " +
+                        "WHERE os.order.id = :orderId")
+        List<String> findProductNamesByOrderId(@Param("orderId") Long orderId);
+
+        List<Order> findTop10ByOrderByCreatedAtDesc();
+
         @Query(value = "select distinct o from Order o inner join OrderShop os on o = os.order where os.shop = :shop")
         Page<Order> findAllByShop(Shop shop, Pageable pageable);
+
+        @Query("SELECT SUM(o.totalPrice) FROM Order o WHERE o.createdAt BETWEEN :startOfDay AND :endOfDay AND o.status = 'ORDER_COMPLETED'")
+        BigDecimal calculateRevenueBetween(@Param("startOfDay") Date startOfDay,
+                        @Param("endOfDay") Date endOfDay);
 
         List<Order> findAllByPaymentOrderCode(String paymentOrderCode);
 

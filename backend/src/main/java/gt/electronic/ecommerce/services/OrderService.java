@@ -12,7 +12,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author quang huy
@@ -20,6 +22,16 @@ import java.util.List;
  */
 public interface OrderService {
   Page<OrderResponseDTO> getAllOrders(Pageable pageable);
+
+  List<Map<String, Object>> getRecentOrders();
+
+  List<Map<String, Object>> getLastSixMonthsRevenue();
+
+  Long getOrderCount();
+
+  Map<String, BigDecimal> getOrderStatistics();
+
+  BigDecimal getTodayRevenue();
 
   Page<OrderResponseDTO> getAllOrdersByUser(String loginKey, Long userId, Pageable pageable);
 

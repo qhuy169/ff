@@ -72,7 +72,7 @@ public class ProductController {
                         @RequestParam(name = "location", required = false, defaultValue = "") String locationString,
                         @RequestParam(name = "sortOption", required = false, defaultValue = "0") int sortOption,
                         @RequestParam(name = "minPrice", required = false, defaultValue = "0") BigDecimal minPrice,
-                        @RequestParam(name = "maxPrice", required = false, defaultValue = "100000000") BigDecimal maxPrice) {
+                        @RequestParam(name = "maxPrice", required = false, defaultValue = "500000000") BigDecimal maxPrice) {
                 List<Sort.Order> orderList = new ArrayList<>();
                 if (!Objects.equals(sortField.trim(), "") || (Objects.equals(sortField.trim(),
                                 "id") &&
@@ -220,14 +220,15 @@ public class ProductController {
 
         @DeleteMapping(value = "/{id}")
         public ResponseObject<ProductResponseDTO> deleteProductById(
-            @PathVariable(name = "id") Long id,
-            @RequestParam(name = "admin", required = false, defaultValue = "false") boolean isAdmin,
-            HttpServletRequest request) {
-            isAdmin = isAdmin ? isAdmin : SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString()
-                            .contains(ERole.ROLE_ADMIN.toString());
-            String loginKey = jwtTokenUtil.getUserNameFromRequest(request);
-            return new ResponseObject<>(HttpStatus.OK, String.format(Utils.DELETE_OBJECT_SUCCESSFULLY, branchName),
-                this.productService.deleteProductById(loginKey, id, isAdmin));
+                        @PathVariable(name = "id") Long id,
+                        @RequestParam(name = "admin", required = false, defaultValue = "false") boolean isAdmin,
+                        HttpServletRequest request) {
+                isAdmin = isAdmin ? isAdmin
+                                : SecurityContextHolder.getContext().getAuthentication().getAuthorities().toString()
+                                                .contains(ERole.ROLE_ADMIN.toString());
+                String loginKey = jwtTokenUtil.getUserNameFromRequest(request);
+                return new ResponseObject<>(HttpStatus.OK, String.format(Utils.DELETE_OBJECT_SUCCESSFULLY, branchName),
+                                this.productService.deleteProductById(loginKey, id, isAdmin));
         }
-        
+
 }

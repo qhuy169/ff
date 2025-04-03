@@ -5,10 +5,13 @@ import './table.scss'
 
 function OrderDetail(props) {
     const { customer } = props;
+    console.log(props);
+
     const orderItems = props.order_items.data;
-    
+    console.log(orderItems);
+
     const deliveryTime = "3/8/2025"
-    const amountPaid = props.totalPrice 
+    const amountPaid = props.totalPrice
     const surcharge = 20000
     const style = (text) => {
         switch (text) {
@@ -65,9 +68,9 @@ function OrderDetail(props) {
                     <span className="text-red-500">{numberWithCommas(amountPaid + surcharge)}₫</span>
                 </p>
                 <p>
-                   
+
                     <span className="font-bold"> Số tiền đã thanh toán:  </span>
-                    
+
                     <span className="text-red-400"><CheckCircleFill className="text-blue-500 text-xl" /> {numberWithCommas(amountPaid + surcharge)}₫</span>
                 </p>
             </div>

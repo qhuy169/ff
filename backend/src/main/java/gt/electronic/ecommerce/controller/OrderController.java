@@ -24,7 +24,10 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 
 import static gt.electronic.ecommerce.utils.Utils.*;
 
@@ -53,6 +56,20 @@ public class OrderController {
                 this.orderService = orderService;
         }
 
+        @GetMapping("/recent-orders")
+        @RolesAllowed({ ERole.Names.ADMIN })
+        public ResponseObject<List<Map<String, Object>>> getRecentOrders() {
+                List<Map<String, Object>> recentOrders = this.orderService.getRecentOrders();
+                return new ResponseObject<>(HttpStatus.OK, "Lấy danh sách đơn hàng gần đây thành công.", recentOrders);
+        }
+
+        @GetMapping("/revenue/last-six-months")
+        @RolesAllowed({ ERole.Names.ADMIN })
+        public ResponseObject<List<Map<String, Object>>> getLastSixMonthsRevenue() {
+                List<Map<String, Object>> revenueData = this.orderService.getLastSixMonthsRevenue();
+                return new ResponseObject<>(HttpStatus.OK, "Lấy doanh thu 6 tháng gần nhất thành công.", revenueData);
+        }
+
         @GetMapping
         @RolesAllowed({ ERole.Names.ADMIN })
         public ResponseObject<List<OrderResponseDTO>> getAllOrders(
@@ -65,6 +82,20 @@ public class OrderController {
                 Pageable pageable = PageRequest.of(page > 0 ? page - 1 : 0, size, sort);
                 return new ResponseObject<>(
                                 HttpStatus.OK, "", this.orderService.getAllOrders(pageable).toList());
+        }
+
+        @GetMapping("/statistics")
+        @RolesAllowed({ ERole.Names.ADMIN })
+        public ResponseObject<Map<String, BigDecimal>> getOrderStatistics() {
+                Map<String, BigDecimal> statistics = this.orderService.getOrderStatistics();
+                return new ResponseObject<>(HttpStatus.OK, "Lấy số liệu thống kê thành công.", statistics);
+        }
+
+        @GetMapping("/revenue/today")
+        @RolesAllowed({ ERole.Names.ADMIN })
+        public ResponseObject<BigDecimal> getTodayRevenue() {
+                BigDecimal todayRevenue = this.orderService.getTodayRevenue();
+                return new ResponseObject<>(HttpStatus.OK, "Lấy doanh thu hôm nay thành công.", todayRevenue);
         }
 
         @GetMapping("/userId/{userId}")
@@ -168,5 +199,12 @@ public class OrderController {
                 String loginKey = jwtTokenUtil.getUserNameFromRequest(request);
                 return new ResponseObject<>(HttpStatus.OK, String.format(Utils.DELETE_OBJECT_SUCCESSFULLY, branchName),
                                 this.orderService.deleteOrderById(loginKey, id));
+        }
+
+        @GetMapping("/count")
+        @RolesAllowed({ ERole.Names.ADMIN })
+        public ResponseObject<Long> getOrderCount() {
+                Long orderCount = this.orderService.getOrderCount();
+                return new ResponseObject<>(HttpStatus.OK, "Lấy số lượng đơn hàng thành công.", orderCount);
         }
 }

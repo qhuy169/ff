@@ -109,4 +109,11 @@ public class UserController {
     return new ResponseObject<>(HttpStatus.OK, String.format(Utils.DELETE_OBJECT_SUCCESSFULLY, branchName),
         this.userService.deleteUserById(id));
   }
+
+  @GetMapping("/count")
+  @RolesAllowed({ ERole.Names.ADMIN })
+  public ResponseObject<Long> getUserCount() {
+    Long userCount = this.userService.getUserCount();
+    return new ResponseObject<>(HttpStatus.OK, "Lấy số lượng người dùng thành công.", userCount);
+  }
 }

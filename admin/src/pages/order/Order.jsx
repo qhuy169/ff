@@ -31,7 +31,8 @@ const Order = (props) => {
         }
     };
     const [orderDetail, setOrderDetail] = useState({ index: -1, id: null });
-    const handleAccept = async(order) => {
+
+    const handleAccept = async (order) => {
         if (confirm("Bạn có muốn Xác nhận đơn hàng không?")) {
             const id = order.id;
             const data = JSON.stringify({ status: "Đã xác nhận" });
@@ -49,6 +50,7 @@ const Order = (props) => {
     const dispatch = useDispatch();
 
     const orders = useSelector((state) => state.orders.order.data);
+
 
     useEffect(() => {
         getAllOrders(dispatch);
@@ -93,13 +95,13 @@ const Order = (props) => {
                                                     return current.index ===
                                                         index
                                                         ? {
-                                                              index: -1,
-                                                              id: order.id,
-                                                          }
+                                                            index: -1,
+                                                            id: order.id,
+                                                        }
                                                         : {
-                                                              index,
-                                                              id: order.id,
-                                                          };
+                                                            index,
+                                                            id: order.id,
+                                                        };
                                                 })
                                             }
                                         >
@@ -130,7 +132,7 @@ const Order = (props) => {
                                             className={clsx(
                                                 "bg-red-500 text-xl font-medium p-4 rounded-lg  text-white",
                                                 !displayAcceptBtn &&
-                                                    "!bg-gray-100 !text-gray-700"
+                                                "!bg-gray-100 !text-gray-700"
                                             )}
                                         >
                                             Xác nhận
@@ -140,7 +142,13 @@ const Order = (props) => {
                                 {displayDetail && (
                                     <Table.Row>
                                         <Table.Cell className="" colspan="7">
-                                            <OrderDetail {...order} />
+                                            <OrderDetail
+                                                id={order.id}
+                                                status={order.status}
+                                                totalPrice={order.totalPrice}
+                                                customer={order.customer}
+                                                order_items={order.order_items} // Truyền đúng dữ liệu order_items
+                                            />
                                         </Table.Cell>
                                     </Table.Row>
                                 )}

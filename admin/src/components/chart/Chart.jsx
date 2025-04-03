@@ -7,17 +7,32 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  { name: "January", Total: 1200 },
-  { name: "February", Total: 2100 },
-  { name: "March", Total: 800 },
-  { name: "April", Total: 1600 },
-  { name: "May", Total: 900 },
-  { name: "June", Total: 1700 },
-];
+import { useEffect, useState } from "react";
+import axiosInstance from "../../api";
 
 const Chart = ({ aspect, title }) => {
+  const [data, setData] = useState([]); // State để lưu dữ liệu biểu đồ
+  const [loading, setLoading] = useState(true); // State để quản lý trạng thái tải dữ liệu
+
+  useEffect(() => {
+    const fetchChartData = async () => {
+      try {
+        const response = await axiosInstance.get("orders/revenue/last-six-months"); // Gọi API
+        const formattedData = response.data.data.map((item) => ({
+          name: item.month, // Tên tháng
+          Total: parseFloat(item.total), // Tổng doanh thu
+        }));
+        setData(formattedData); // Cập nhật dữ liệu biểu đồ
+      } catch (error) {
+        console.error("Lỗi khi lấy dữ liệu biểu đồ:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchChartData();
+  }, []);
+
   return (
     <div className="chart">
       <div className="title">{title}</div>
@@ -25,7 +40,7 @@ const Chart = ({ aspect, title }) => {
         <AreaChart
           width={730}
           height={250}
-          data={data}
+          data={loading ? [] : data} // Hiển thị dữ liệu khi đã tải xong
           margin={{ top: 10, right: 30, left: 0, bottom: 0 }}
         >
           <defs>

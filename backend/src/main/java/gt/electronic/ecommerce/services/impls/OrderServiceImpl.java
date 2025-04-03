@@ -25,7 +25,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -67,6 +76,114 @@ public class OrderServiceImpl implements OrderService {
     @Autowired
     public void LocationService(LocationService locationService) {
         this.locationService = locationService;
+    }
+
+    @Override
+    public Long getOrderCount() {
+        return orderRepo.count();
+    }
+
+    @Override
+    public BigDecimal getTodayRevenue() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
+
+        // Chuyển đổi LocalDateTime thành java.util.Date
+        Date startOfDayDate = java.sql.Timestamp.valueOf(startOfDay);
+        Date endOfDayDate = java.sql.Timestamp.valueOf(endOfDay);
+
+        // Tính tổng doanh thu từ các đơn hàng trong ngày hôm nay
+        BigDecimal revenue = orderRepo.calculateRevenueBetween(startOfDayDate, endOfDayDate);
+        return revenue != null ? revenue : BigDecimal.ZERO;
+    }
+
+    @Override
+    public Map<String, BigDecimal> getOrderStatistics() {
+        LocalDate today = LocalDate.now();
+        LocalDateTime startOfDay = today.atStartOfDay();
+        LocalDateTime endOfDay = today.atTime(LocalTime.MAX);
+
+        // Chuyển đổi LocalDateTime thành java.util.Date
+        Date startOfDayDate = java.sql.Timestamp.valueOf(startOfDay);
+        Date endOfDayDate = java.sql.Timestamp.valueOf(endOfDay);
+
+        // Tính doanh thu hôm nay
+        BigDecimal todayRevenue = orderRepo.calculateRevenueBetween(startOfDayDate, endOfDayDate);
+
+        // Tính doanh thu tuần trước
+        LocalDate lastWeekStart = today.minusWeeks(1).with(DayOfWeek.MONDAY);
+        LocalDate lastWeekEnd = today.minusWeeks(1).with(DayOfWeek.SUNDAY);
+        Date lastWeekStartDate = java.sql.Timestamp.valueOf(lastWeekStart.atStartOfDay());
+        Date lastWeekEndDate = java.sql.Timestamp.valueOf(lastWeekEnd.atTime(LocalTime.MAX));
+        BigDecimal lastWeekRevenue = orderRepo.calculateRevenueBetween(lastWeekStartDate, lastWeekEndDate);
+
+        // Tính doanh thu tháng trước
+        LocalDate lastMonthStart = today.minusMonths(1).withDayOfMonth(1);
+        LocalDate lastMonthEnd = today.minusMonths(1).withDayOfMonth(lastMonthStart.lengthOfMonth());
+        Date lastMonthStartDate = java.sql.Timestamp.valueOf(lastMonthStart.atStartOfDay());
+        Date lastMonthEndDate = java.sql.Timestamp.valueOf(lastMonthEnd.atTime(LocalTime.MAX));
+        BigDecimal lastMonthRevenue = orderRepo.calculateRevenueBetween(lastMonthStartDate, lastMonthEndDate);
+
+        // Doanh thu mục tiêu (giả định)
+        BigDecimal targetRevenue = new BigDecimal("10000");
+
+        // Tạo map để trả về các số liệu
+        Map<String, BigDecimal> statistics = new HashMap<>();
+        statistics.put("todayRevenue", todayRevenue != null ? todayRevenue : BigDecimal.ZERO);
+        statistics.put("lastWeekRevenue", lastWeekRevenue != null ? lastWeekRevenue : BigDecimal.ZERO);
+        statistics.put("lastMonthRevenue", lastMonthRevenue != null ? lastMonthRevenue : BigDecimal.ZERO);
+        statistics.put("targetRevenue", targetRevenue);
+
+        return statistics;
+    }
+
+    @Override
+    public List<Map<String, Object>> getLastSixMonthsRevenue() {
+        List<Map<String, Object>> revenueData = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+
+        for (int i = 5; i >= 0; i--) {
+            LocalDate firstDayOfMonth = today.minusMonths(i).withDayOfMonth(1);
+            LocalDate lastDayOfMonth = today.minusMonths(i).withDayOfMonth(firstDayOfMonth.lengthOfMonth());
+
+            Date startOfMonth = java.sql.Timestamp.valueOf(firstDayOfMonth.atStartOfDay());
+            Date endOfMonth = java.sql.Timestamp.valueOf(lastDayOfMonth.atTime(LocalTime.MAX));
+
+            BigDecimal monthlyRevenue = orderRepo.calculateRevenueBetween(startOfMonth, endOfMonth);
+
+            Map<String, Object> monthData = new HashMap<>();
+            monthData.put("month", firstDayOfMonth.getMonth().toString()); // Tên tháng
+            monthData.put("total", monthlyRevenue != null ? monthlyRevenue : BigDecimal.ZERO);
+
+            revenueData.add(monthData);
+        }
+
+        return revenueData;
+    }
+
+    @Override
+    public List<Map<String, Object>> getRecentOrders() {
+        List<Order> orders = orderRepo.findTop10ByOrderByCreatedAtDesc(); // Lấy 10 đơn hàng gần nhất
+        List<Map<String, Object>> recentOrders = new ArrayList<>();
+
+        for (Order order : orders) {
+            Map<String, Object> orderData = new HashMap<>();
+            orderData.put("id", order.getId());
+
+            // Lấy danh sách tên sản phẩm liên quan đến đơn hàng
+            List<String> productNames = orderRepo.findProductNamesByOrderId(order.getId());
+            orderData.put("product", String.join(", ", productNames)); // Ghép tên sản phẩm thành chuỗi
+
+            orderData.put("customer", order.getFullName());
+            orderData.put("date", order.getCreatedAt());
+            orderData.put("amount", order.getTotalPrice());
+            orderData.put("method", order.getPayment());
+            orderData.put("status", order.getStatus());
+            recentOrders.add(orderData);
+        }
+
+        return recentOrders;
     }
 
     private OrderItemMapper orderItemMapper;

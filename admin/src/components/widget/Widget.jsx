@@ -5,12 +5,34 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import AccountBalanceWalletOutlinedIcon from "@mui/icons-material/AccountBalanceWalletOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import MonetizationOnOutlinedIcon from "@mui/icons-material/MonetizationOnOutlined";
+import { useEffect, useState } from "react";
+import axiosInstance from "../../api";
 
 const Widget = ({ type }) => {
+    const [count, setCount] = useState(0); // State để lưu số lượng
+
+    useEffect(() => {
+        const fetchCount = async () => {
+            try {
+                if (type === "user") {
+                    // Gọi API để lấy số lượng người dùng
+                    const response = await axiosInstance.get("users/count");
+                    setCount(response.data); // Cập nhật số lượng người dùng
+                } else if (type === "order") {
+                    // Gọi API để lấy số lượng đơn hàng
+                    const response = await axiosInstance.get("orders/count");
+                    setCount(response.data); // Cập nhật số lượng đơn hàng
+                }
+            } catch (error) {
+                console.error(`Lỗi khi lấy số lượng ${type}:`, error);
+            }
+        };
+        fetchCount();
+    }, [type]);
+
     let data;
 
     //temporary
-    const amount = 100;
     const diff = 20;
 
     switch (type) {
@@ -87,9 +109,8 @@ const Widget = ({ type }) => {
             <div className="left">
                 <span className="title">{data?.title}</span>
                 <span className="counter">
-    {amount} {data?.isMoney && "VNĐ"}
-</span>
-
+                    {count} {data?.isMoney && "VNĐ"}
+                </span>
                 <Link to={`${type}s`}>
                     <span className="link">{data?.link}</span>
                 </Link>

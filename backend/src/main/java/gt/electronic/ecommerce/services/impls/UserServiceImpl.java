@@ -85,6 +85,11 @@ public class UserServiceImpl implements UserService {
         this.shopService = shopService;
     }
 
+    @Override
+    public Long getUserCount() {
+        return userRepo.count();
+    }
+
     private UserMapper userMapper;
 
     @Autowired

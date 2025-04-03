@@ -125,13 +125,13 @@ const Datatable = ({ rows, title, productColumns, type = '', reply = false }) =>
   return (
     <div className="datatable">
       <div className="datatableTitle">
-        Add New {title}
+        Quản lý sản phẩm {title}
         <Link to={'/' + type + '/new'} className="link">
           Add New
         </Link>
       </div>
       <DataGrid
-    
+
         getRowId={(row) => row.id}
         className="datagrid"
         rows={rows}
